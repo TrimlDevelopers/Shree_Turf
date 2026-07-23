@@ -70,7 +70,7 @@ export default function Hero() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.85, ease }}
-      className="relative isolate aspect-[1077/1294] w-full overflow-hidden bg-bg md:aspect-auto md:min-h-[100svh]"
+      className="relative isolate aspect-[1077/1753] w-full overflow-hidden bg-bg md:aspect-auto md:min-h-[100svh]"
     >
       {/* Mobile logo — header stays hidden until Gallery */}
       <img
@@ -85,14 +85,14 @@ export default function Hero() {
           style={{ y: bgY, scale: bgScale }}
           className="absolute inset-0 will-change-transform"
         >
-          {/* Mobile: section aspect = photo → full SHREE TURF 360, no black gap */}
+          {/* Mobile: aspect matches photo → full “SHREE TURF 360” */}
           <img
             src={heroTurf}
             alt=""
             aria-hidden
             fetchPriority="high"
             decoding="async"
-            className="absolute inset-0 h-full max-h-none w-full max-w-none object-cover object-center brightness-110 contrast-105 saturate-125 md:hidden"
+            className="absolute inset-0 h-full max-h-none w-full max-w-none translate-x-[7px] scale-[1.12] object-cover object-center brightness-110 contrast-105 saturate-125 md:hidden"
           />
           {/* Desktop: full-bleed cover */}
           <img
