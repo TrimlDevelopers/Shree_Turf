@@ -99,7 +99,6 @@ export default function InfoGrid() {
                     {line}
                   </p>
                 ))}
-                <p className="break-words pt-1 text-muted">{siteInfo.address}</p>
               </div>
             </div>
 
