@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { FaSun, FaCloudSun, FaMoon } from 'react-icons/fa'
+import { FaSun, FaCloudSun, FaMoon, FaCalendarAlt } from 'react-icons/fa'
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 import { WiDaySunnyOvercast } from 'react-icons/wi'
-import { pricing, liveSlots } from '../../data/content'
+import { pricing, getSlotsForDate } from '../../data/content'
 import { scrollToSection } from '../../hooks/useActiveSection'
 import Container from '../ui/Container'
 import { cn } from '../../utils/cn'
@@ -17,11 +17,48 @@ const icons = {
 
 const PREVIEW_COUNT = 5
 
+function todayISO() {
+  const d = new Date()
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+function formatDisplayDate(value) {
+  if (!value) return ''
+  const [y, m, d] = value.split('-')
+  return `${d}/${m}/${y}`
+}
+
+function isSameDay(a, b) {
+  return a === b
+}
+
 export default function PricingAvailability() {
+  const today = todayISO()
+  const [selectedDate, setSelectedDate] = useState(today)
   const [showFull, setShowFull] = useState(false)
-  const remaining = liveSlots.length - PREVIEW_COUNT
-  const visibleSlots = showFull ? liveSlots : liveSlots.slice(0, PREVIEW_COUNT)
-  const availableCount = liveSlots.filter((s) => s.status === 'available').length
+
+  const slots = useMemo(() => getSlotsForDate(selectedDate), [selectedDate])
+  const remaining = slots.length - PREVIEW_COUNT
+  const visibleSlots = showFull ? slots : slots.slice(0, PREVIEW_COUNT)
+  const availableCount = slots.filter((s) => s.status === 'available').length
+
+  const handleDateChange = (value) => {
+    setSelectedDate(value || today)
+    setShowFull(false)
+  }
+
+  // Allow selecting today + next 14 days
+  const maxDate = (() => {
+    const d = new Date()
+    d.setDate(d.getDate() + 14)
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    return `${y}-${m}-${day}`
+  })()
 
   return (
     <section id="pricing" className="section-space">
@@ -122,9 +159,34 @@ export default function PricingAvailability() {
                 </h3>
                 <p className="text-[11px] text-muted sm:text-xs">
                   <span className="font-semibold text-primary">{availableCount}</span>
-                  {' '}open · {liveSlots.length} today
+                  {' '}open · {slots.length} slots
                 </p>
               </div>
+
+              {/* Date picker */}
+              <label className="relative mt-4 flex h-11 w-full cursor-pointer items-center gap-2.5 rounded-xl border border-white/15 bg-bg/70 px-3 transition focus-within:border-primary/70 hover:border-primary/40 sm:mt-5 sm:h-12 sm:px-3.5">
+                <FaCalendarAlt className="shrink-0 text-primary" size={14} />
+                <span className="pointer-events-none flex-1 text-sm font-medium text-text">
+                  {formatDisplayDate(selectedDate)}
+                  {isSameDay(selectedDate, today) && (
+                    <span className="ml-2 text-xs font-normal text-muted">
+                      (Today)
+                    </span>
+                  )}
+                </span>
+                <span className="pointer-events-none text-[10px] font-bold uppercase tracking-wider text-primary">
+                  Change
+                </span>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  min={today}
+                  max={maxDate}
+                  onChange={(e) => handleDateChange(e.target.value)}
+                  aria-label="Select date to check availability"
+                  className="absolute inset-0 cursor-pointer opacity-0"
+                />
+              </label>
 
               <div
                 className={cn(
@@ -133,32 +195,40 @@ export default function PricingAvailability() {
                     'max-h-[20rem] overflow-y-auto pr-1 sm:max-h-[28rem] [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40',
                 )}
               >
-                <AnimatePresence initial={false}>
-                  {visibleSlots.map((slot, index) => {
-                    const isAvailable = slot.status === 'available'
-                    return (
-                      <motion.div
-                        key={slot.id}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ delay: Math.min(index, 8) * 0.03, duration: 0.25 }}
-                        className="flex items-center justify-between gap-3 rounded-xl border border-white/8 bg-bg/50 px-3 py-2.5 sm:px-4"
-                      >
-                        <span className="text-xs font-semibold text-text sm:text-sm">
-                          {slot.time}
-                        </span>
-                        <span
-                          className={cn(
-                            'shrink-0 text-[10px] font-bold uppercase tracking-wider sm:text-[11px]',
-                            isAvailable ? 'text-primary' : 'text-red-400',
-                          )}
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={selectedDate}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22 }}
+                    className="space-y-2 sm:space-y-2.5"
+                  >
+                    {visibleSlots.map((slot, index) => {
+                      const isAvailable = slot.status === 'available'
+                      return (
+                        <div
+                          key={slot.id}
+                          className="flex items-center justify-between gap-3 rounded-xl border border-white/8 bg-bg/50 px-3 py-2.5 sm:px-4"
+                          style={{
+                            animationDelay: `${Math.min(index, 8) * 30}ms`,
+                          }}
                         >
-                          {isAvailable ? 'Available' : 'Booked'}
-                        </span>
-                      </motion.div>
-                    )
-                  })}
+                          <span className="text-xs font-semibold text-text sm:text-sm">
+                            {slot.time}
+                          </span>
+                          <span
+                            className={cn(
+                              'shrink-0 text-[10px] font-bold uppercase tracking-wider sm:text-[11px]',
+                              isAvailable ? 'text-primary' : 'text-red-400',
+                            )}
+                          >
+                            {isAvailable ? 'Available' : 'Booked'}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </motion.div>
                 </AnimatePresence>
               </div>
 

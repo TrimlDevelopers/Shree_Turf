@@ -67,26 +67,48 @@ export const pricing = [
   },
 ]
 
-export const liveSlots = [
-  { id: 's1', time: '6AM – 7AM', status: 'available' },
-  { id: 's2', time: '7AM – 8AM', status: 'available' },
-  { id: 's3', time: '8AM – 9AM', status: 'booked' },
-  { id: 's4', time: '9AM – 10AM', status: 'available' },
-  { id: 's5', time: '10AM – 11AM', status: 'available' },
-  { id: 's6', time: '11AM – 12PM', status: 'available' },
-  { id: 's7', time: '12PM – 1PM', status: 'available' },
-  { id: 's8', time: '1PM – 2PM', status: 'booked' },
-  { id: 's9', time: '2PM – 3PM', status: 'available' },
-  { id: 's10', time: '3PM – 4PM', status: 'available' },
-  { id: 's11', time: '4PM – 5PM', status: 'booked' },
-  { id: 's12', time: '5PM – 6PM', status: 'booked' },
-  { id: 's13', time: '6PM – 7PM', status: 'available' },
-  { id: 's14', time: '7PM – 8PM', status: 'booked' },
-  { id: 's15', time: '8PM – 9PM', status: 'available' },
-  { id: 's16', time: '9PM – 10PM', status: 'available' },
-  { id: 's17', time: '10PM – 11PM', status: 'booked' },
-  { id: 's18', time: '11PM – 12AM', status: 'available' },
+export const liveSlotTimes = [
+  '6AM – 7AM',
+  '7AM – 8AM',
+  '8AM – 9AM',
+  '9AM – 10AM',
+  '10AM – 11AM',
+  '11AM – 12PM',
+  '12PM – 1PM',
+  '1PM – 2PM',
+  '2PM – 3PM',
+  '3PM – 4PM',
+  '4PM – 5PM',
+  '5PM – 6PM',
+  '6PM – 7PM',
+  '7PM – 8PM',
+  '8PM – 9PM',
+  '9PM – 10PM',
+  '10PM – 11PM',
+  '11PM – 12AM',
 ]
+
+/** Deterministic mock availability for a YYYY-MM-DD date (frontend POC). */
+export function getSlotsForDate(dateStr) {
+  const seed = [...(dateStr || 'today')].reduce(
+    (acc, ch) => acc + ch.charCodeAt(0),
+    0,
+  )
+
+  return liveSlotTimes.map((time, index) => {
+    const hash = (seed * 17 + index * 31) % 10
+    const status = hash < 3 || hash === 7 ? 'booked' : 'available'
+    return {
+      id: `${dateStr}-${index}`,
+      time,
+      status,
+    }
+  })
+}
+
+export const liveSlots = getSlotsForDate(
+  new Date().toISOString().split('T')[0],
+)
 
 export const timeSlots = [
   '06:00 – 07:00',
