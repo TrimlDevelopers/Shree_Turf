@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #050505;
+  --color-card: #111111;
+  --color-primary: #84d321;
+  --color-secondary: #2b6d15;
+  --color-accent: #ffc400;
+  --color-text: #ffffff;
+  --color-muted: #cfcfcf;
+
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-glow: 0 0 40px rgb(132 211 33 / 0.22);
+  --shadow-card: 0 20px 60px rgb(0 0 0 / 0.45);
+  --shadow-soft: 0 12px 40px rgb(0 0 0 / 0.35);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  ::selection {
+    @apply bg-primary/30 text-text;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
+  @media (min-width: 640px) {
+    section[id] {
+      scroll-margin-top: 5.5rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    section[id] {
+      scroll-margin-top: 6.5rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    section[id] {
+      scroll-margin-top: 7rem;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glass-card {
+    @apply rounded-2xl border border-primary/35 bg-card/70 shadow-[0_20px_60px_rgb(0_0_0_/_0.45)] backdrop-blur-xl;
+  }
+
+  .btn-glow {
+    box-shadow: 0 0 28px rgb(132 211 33 / 0.35);
+  }
+
+  .section-space {
+    @apply py-12 sm:py-14 md:py-20 lg:py-24;
+  }
+
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
