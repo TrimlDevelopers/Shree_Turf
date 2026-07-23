@@ -15,6 +15,27 @@
   --shadow-glow: 0 0 40px rgb(132 211 33 / 0.22);
   --shadow-card: 0 20px 60px rgb(0 0 0 / 0.45);
   --shadow-soft: 0 12px 40px rgb(0 0 0 / 0.35);
+
+  --animate-gallery-marquee: gallery-marquee 45s linear infinite;
+  --animate-gallery-marquee-reverse: gallery-marquee-reverse 45s linear infinite;
+
+  @keyframes gallery-marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-33.333%, 0, 0);
+    }
+  }
+
+  @keyframes gallery-marquee-reverse {
+    from {
+      transform: translate3d(-33.333%, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
 }
 
 @layer base {
@@ -99,5 +120,31 @@
 
   .safe-bottom {
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .animate-gallery-marquee {
+    animation: gallery-marquee 45s linear infinite;
+  }
+
+  .animate-gallery-marquee-reverse {
+    animation: gallery-marquee-reverse 45s linear infinite;
+  }
+}
+
+@keyframes gallery-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-33.333%, 0, 0);
+  }
+}
+
+@keyframes gallery-marquee-reverse {
+  from {
+    transform: translate3d(-33.333%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
   }
 }

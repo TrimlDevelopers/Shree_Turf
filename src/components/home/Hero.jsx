@@ -70,52 +70,52 @@ export default function Hero() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.85, ease }}
-      className="relative isolate min-h-[100svh] overflow-hidden bg-bg md:min-h-[100svh] md:aspect-auto"
+      className="relative isolate aspect-[1077/1294] w-full overflow-hidden bg-bg md:aspect-auto md:min-h-[100svh]"
     >
+      {/* Mobile logo — header stays hidden until Gallery */}
+      <img
+        src="/turflogo.jpeg"
+        alt={siteInfo.name}
+        className="absolute left-4 top-3.5 z-20 h-11 w-11 rounded-full object-cover shadow-[0_0_24px_rgb(132_211_33_/_0.18)] sm:left-5 sm:top-4 sm:h-14 sm:w-14 md:hidden"
+      />
+
       {/* Background */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <motion.div
           style={{ y: bgY, scale: bgScale }}
           className="absolute inset-0 will-change-transform"
         >
-          {/* Mobile: contain full photo inside viewport + soft edge fill */}
-          <img
-            src={heroTurf}
-            alt=""
-            aria-hidden
-            decoding="async"
-            className="absolute inset-0 h-full w-full scale-110 object-cover object-[center_45%] brightness-110 contrast-105 saturate-125 blur-[2px] md:hidden"
-          />
+          {/* Mobile: section aspect = photo → full SHREE TURF 360, no black gap */}
           <img
             src={heroTurf}
             alt=""
             aria-hidden
             fetchPriority="high"
             decoding="async"
-            className="relative h-full w-full object-contain object-center brightness-110 contrast-105 saturate-125 md:hidden"
+            className="absolute inset-0 h-full max-h-none w-full max-w-none object-cover object-center brightness-110 contrast-105 saturate-125 md:hidden"
           />
-          {/* Desktop: full-bleed cover — trim empty lower sky, keep branding + turf */}
+          {/* Desktop: full-bleed cover */}
           <img
             src={heroTurf}
             alt=""
             aria-hidden
             fetchPriority="high"
             decoding="async"
-            className="absolute inset-0 hidden h-full w-full object-cover object-[center_52%] brightness-110 contrast-105 saturate-125 md:block"
+            className="absolute inset-0 hidden h-full max-h-none w-full max-w-none object-cover object-[center_52%] brightness-110 contrast-105 saturate-125 md:block"
           />
         </motion.div>
 
-        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-black/10 sm:from-black/60 sm:via-black/25 sm:to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-transparent sm:from-black/50 sm:via-black/20 md:from-black/60 md:via-black/25 md:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/45" />
       </div>
 
-      <Container className="relative flex min-h-[100svh] flex-col justify-center py-28 pt-44 sm:py-32 sm:pt-52 md:h-full md:min-h-0 md:py-36 md:pt-56">
+      <Container className="relative flex h-full flex-col justify-end pb-8 pt-16 sm:justify-center sm:pb-28 sm:pt-40 md:min-h-[100svh] md:justify-center md:py-36 md:pt-56">
         {/* Headline — upper right */}
         <motion.h1
           initial={{ opacity: 0, x: 24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.35, duration: 0.7, ease }}
-          className="pointer-events-none absolute right-4 top-20 z-10 max-w-[min(100%,18rem)] text-right font-display text-[1.85rem] font-extrabold uppercase leading-[0.95] tracking-tight text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.55)] sm:right-5 sm:top-24 sm:max-w-[22rem] sm:text-4xl md:right-6 md:top-[252px] md:max-w-[28rem] md:text-5xl lg:right-8 lg:top-[268px] lg:text-[3.5rem] xl:right-10 xl:text-[4rem]"
+          className="pointer-events-none absolute right-4 top-12 z-10 max-w-[min(100%,18rem)] text-right font-display text-[1.85rem] font-extrabold uppercase leading-[0.95] tracking-tight text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.55)] sm:right-5 sm:top-20 sm:max-w-[22rem] sm:text-4xl md:right-6 md:top-[252px] md:max-w-[28rem] md:text-5xl lg:right-8 lg:top-[268px] lg:text-[3.5rem] xl:right-10 xl:text-[4rem]"
         >
           <span className="block">Play More.</span>
           <span className="block text-primary">Worry Less.</span>
@@ -126,7 +126,7 @@ export default function Hero() {
           variants={container}
           initial="hidden"
           animate="show"
-          className="mt-[470px] w-full max-w-xl text-center will-change-transform [text-shadow:0_2px_18px_rgba(0,0,0,0.45)] md:mx-auto md:mt-[168px]"
+          className="w-full max-w-xl text-center will-change-transform [text-shadow:0_2px_18px_rgba(0,0,0,0.45)] sm:mt-[380px] md:mx-auto md:mt-[168px]"
         >
           <motion.p
             variants={item}
