@@ -11,11 +11,11 @@ export const siteInfo = {
     'Asara Nagar, Ichalkaranji',
     'Maharashtra 416115',
   ],
-  phone: '+91 98765 43210',
+  phone: '+91 70575 17775',
   email: 'book@shreeturf360.com',
   hours: '6:00 AM – 12:00 AM',
-  whatsapp: '919876543210',
-  instagram: 'https://instagram.com/shreeturf360',
+  whatsapp: '917057517775',
+  instagram: 'https://www.instagram.com/shree_turf360?igsh=MzJ6N3JqMW9mbWVs',
   facebook: 'https://facebook.com/shreeturf360',
   mapsUrl:
     'https://www.google.com/maps/search/?api=1&query=' +
