@@ -1,36 +1,96 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { FaPhoneAlt } from 'react-icons/fa'
-import { navLinks, siteInfo } from '../../data/site'
-import { scrollToSection, useActiveSection } from '../../hooks/useActiveSection'
+import { siteInfo } from '../../data/site'
+import { scrollToSection } from '../../hooks/useActiveSection'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { cn } from '../../utils/cn'
 
-export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const activeId = useActiveSection()
+const IO_THRESHOLDS = Array.from({ length: 101 }, (_, i) => i / 100)
+const SHOW_OFFSET_PX = 50
+const MOBILE_QUERY = '(max-width: 767px)'
 
+export default function Navbar() {
+  const isMobile = useMediaQuery(MOBILE_QUERY)
+  const [scrolled, setScrolled] = useState(false)
+  const [galleryReached, setGalleryReached] = useState(false)
+
+  // Desktop: subtle glass on scroll
   useEffect(() => {
+    if (isMobile) return undefined
+
     const onScroll = () => setScrolled(window.scrollY > 16)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [isMobile])
+
+  // Mobile: glass bar appears once Gallery top hits ~50px from viewport top
+  useEffect(() => {
+    if (!isMobile) {
+      setGalleryReached(true)
+      return undefined
+    }
+
+    setGalleryReached(false)
+    const target = document.getElementById('gallery')
+    if (!target) return undefined
+
+    const update = (top) => {
+      setGalleryReached(top <= SHOW_OFFSET_PX)
+    }
+
+    update(target.getBoundingClientRect().top)
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return
+        update(entry.boundingClientRect.top)
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: IO_THRESHOLDS,
+      },
+    )
+
+    observer.observe(target)
+    return () => observer.disconnect()
+  }, [isMobile])
 
   return (
     <motion.header
       initial={false}
-      animate={{
-        backgroundColor: scrolled ? 'rgba(5, 5, 5, 0.88)' : 'rgba(5, 5, 5, 0)',
-        borderBottomColor: scrolled
-          ? 'rgba(132, 211, 33, 0.14)'
-          : 'rgba(255, 255, 255, 0)',
-        backdropFilter: scrolled ? 'blur(18px)' : 'blur(0px)',
-        WebkitBackdropFilter: scrolled ? 'blur(18px)' : 'blur(0px)',
-      }}
-      transition={{ duration: 0.28, ease: 'easeOut' }}
-      className="fixed inset-x-0 top-0 z-50 border-b"
+      animate={
+        isMobile
+          ? {
+              y: 0,
+              opacity: 1,
+              backgroundColor: galleryReached
+                ? 'rgba(0, 0, 0, 0.7)'
+                : 'rgba(0, 0, 0, 0)',
+              borderBottomColor: galleryReached
+                ? 'rgba(255, 255, 255, 0.1)'
+                : 'rgba(255, 255, 255, 0)',
+              backdropFilter: galleryReached ? 'blur(12px)' : 'blur(0px)',
+              WebkitBackdropFilter: galleryReached ? 'blur(12px)' : 'blur(0px)',
+            }
+          : {
+              y: 0,
+              opacity: 1,
+              backgroundColor: scrolled ? 'rgba(5, 5, 5, 0.92)' : 'rgba(5, 5, 5, 0)',
+              borderBottomColor: scrolled
+                ? 'rgba(132, 211, 33, 0.14)'
+                : 'rgba(255, 255, 255, 0)',
+              backdropFilter: scrolled ? 'blur(18px)' : 'blur(0px)',
+              WebkitBackdropFilter: scrolled ? 'blur(18px)' : 'blur(0px)',
+            }
+      }
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className={cn(
+        'fixed inset-x-0 top-0 z-[9999] w-full border-b will-change-transform',
+      )}
     >
-      <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-3 px-4 sm:h-[80px] sm:px-5 md:h-[88px] md:px-6 lg:px-8 xl:h-[96px] xl:px-10">
+      <div className="mx-auto flex h-[68px] max-w-7xl items-center px-4 sm:h-[80px] sm:px-5 md:h-[88px] md:px-6 lg:px-8 xl:h-[96px] xl:px-10">
         <button
           type="button"
           onClick={() => scrollToSection('home')}
@@ -45,63 +105,6 @@ export default function Navbar() {
             transition={{ type: 'spring', stiffness: 400, damping: 22 }}
           />
         </button>
-
-        {/* Desktop nav — xl+ only */}
-        <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-0.5 xl:flex xl:gap-1 2xl:gap-2">
-          {navLinks.map((link) => {
-            const isActive = activeId === link.id
-            return (
-              <motion.button
-                key={link.id}
-                type="button"
-                onClick={() => scrollToSection(link.id)}
-                whileHover="hover"
-                className={cn(
-                  'relative whitespace-nowrap px-2.5 py-2 text-[12px] font-semibold uppercase tracking-[0.06em] transition-colors duration-300 2xl:px-3.5 2xl:text-[14px]',
-                  isActive ? 'text-primary' : 'text-white hover:text-primary',
-                )}
-              >
-                <motion.span
-                  variants={{ hover: { y: -1 } }}
-                  transition={{ type: 'spring', stiffness: 500, damping: 28 }}
-                  className="inline-block"
-                >
-                  {link.label}
-                </motion.span>
-
-                {isActive ? (
-                  <motion.span
-                    layoutId="nav-underline"
-                    className="absolute inset-x-2.5 -bottom-0.5 h-[2.5px] rounded-full bg-primary"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                ) : (
-                  <motion.span
-                    variants={{ hover: { scaleX: 1, opacity: 1 } }}
-                    initial={{ scaleX: 0, opacity: 0 }}
-                    className="absolute inset-x-2.5 -bottom-0.5 h-[2px] origin-center rounded-full bg-primary/50"
-                    transition={{ duration: 0.22 }}
-                  />
-                )}
-              </motion.button>
-            )
-          })}
-        </nav>
-
-        <motion.a
-          href={`tel:${siteInfo.phone.replace(/\s/g, '')}`}
-          whileHover={{
-            scale: 1.03,
-            boxShadow: '0 0 28px rgba(132, 211, 33, 0.45)',
-          }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 24 }}
-          className="relative z-10 inline-flex shrink-0 items-center gap-2 rounded-full border border-primary bg-transparent px-3 py-2 text-xs font-semibold tracking-wide text-white transition-colors duration-300 hover:bg-primary/10 sm:px-4 sm:py-2.5 sm:text-[13px] md:px-5 md:text-sm"
-        >
-          <FaPhoneAlt className="text-primary" size={12} />
-          <span className="hidden sm:inline">{siteInfo.phone}</span>
-          <span className="sm:hidden">Call</span>
-        </motion.a>
       </div>
     </motion.header>
   )

@@ -1,44 +1,54 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
 import { galleryImages } from '../../data/content'
 import Container from '../ui/Container'
-import { cn } from '../../utils/cn'
+
+const AUTO_MS = 3200
 
 export default function Gallery() {
   const trackRef = useRef(null)
-  const [canPrev, setCanPrev] = useState(false)
-  const [canNext, setCanNext] = useState(true)
+  const pauseRef = useRef(false)
 
-  const updateArrows = () => {
-    const el = trackRef.current
-    if (!el) return
-    const max = el.scrollWidth - el.clientWidth
-    setCanPrev(el.scrollLeft > 8)
-    setCanNext(el.scrollLeft < max - 8)
-  }
-
-  useEffect(() => {
-    const el = trackRef.current
-    if (!el) return undefined
-    updateArrows()
-    el.addEventListener('scroll', updateArrows, { passive: true })
-    window.addEventListener('resize', updateArrows)
-    return () => {
-      el.removeEventListener('scroll', updateArrows)
-      window.removeEventListener('resize', updateArrows)
-    }
-  }, [])
-
-  const scrollByCard = (dir) => {
+  const scrollByCard = useCallback((dir) => {
     const el = trackRef.current
     if (!el) return
     const amount = Math.min(el.clientWidth * 0.85, 380)
+    const max = el.scrollWidth - el.clientWidth
+
+    if (dir > 0 && el.scrollLeft >= max - 8) {
+      el.scrollTo({ left: 0, behavior: 'smooth' })
+      return
+    }
+    if (dir < 0 && el.scrollLeft <= 8) {
+      el.scrollTo({ left: max, behavior: 'smooth' })
+      return
+    }
+
     el.scrollBy({ left: dir * amount, behavior: 'smooth' })
+  }, [])
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return undefined
+
+    const id = window.setInterval(() => {
+      if (pauseRef.current) return
+      scrollByCard(1)
+    }, AUTO_MS)
+
+    return () => window.clearInterval(id)
+  }, [scrollByCard])
+
+  const pause = () => {
+    pauseRef.current = true
+  }
+  const resume = () => {
+    pauseRef.current = false
   }
 
   return (
-    <section id="gallery" className="section-space pt-2 sm:pt-4 md:pt-6">
+    <section id="gallery" className="relative z-10 bg-bg pb-8 pt-0 sm:pb-10 sm:pt-4 md:pb-12 md:pt-6">
       <Container>
         <div className="mb-6 flex items-center justify-between gap-3 sm:mb-8 md:mb-10 md:gap-4">
           <motion.h2
@@ -54,28 +64,20 @@ export default function Gallery() {
             <button
               type="button"
               aria-label="Previous images"
-              disabled={!canPrev}
               onClick={() => scrollByCard(-1)}
-              className={cn(
-                'flex h-9 w-9 items-center justify-center rounded-full border-2 transition sm:h-10 sm:w-10 md:h-11 md:w-11',
-                canPrev
-                  ? 'border-primary text-primary hover:bg-primary hover:text-bg'
-                  : 'cursor-not-allowed border-white/10 text-muted/40',
-              )}
+              onMouseEnter={pause}
+              onMouseLeave={resume}
+              className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-primary text-primary transition hover:bg-primary hover:text-bg sm:h-10 sm:w-10 md:h-11 md:w-11"
             >
               <HiChevronLeft size={20} />
             </button>
             <button
               type="button"
               aria-label="Next images"
-              disabled={!canNext}
               onClick={() => scrollByCard(1)}
-              className={cn(
-                'flex h-9 w-9 items-center justify-center rounded-full border-2 transition sm:h-10 sm:w-10 md:h-11 md:w-11',
-                canNext
-                  ? 'border-primary text-primary hover:bg-primary hover:text-bg'
-                  : 'cursor-not-allowed border-white/10 text-muted/40',
-              )}
+              onMouseEnter={pause}
+              onMouseLeave={resume}
+              className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-primary text-primary transition hover:bg-primary hover:text-bg sm:h-10 sm:w-10 md:h-11 md:w-11"
             >
               <HiChevronRight size={20} />
             </button>
@@ -88,6 +90,12 @@ export default function Gallery() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.15 }}
         transition={{ duration: 0.6 }}
+        onMouseEnter={pause}
+        onMouseLeave={resume}
+        onFocusCapture={pause}
+        onBlurCapture={resume}
+        onTouchStart={pause}
+        onTouchEnd={resume}
       >
         <div
           ref={trackRef}

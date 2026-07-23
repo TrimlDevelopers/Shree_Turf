@@ -15,7 +15,7 @@ const icons = {
   moon: FaMoon,
 }
 
-const PREVIEW_COUNT = 5
+const PREVIEW_COUNT = 8
 
 function todayISO() {
   const d = new Date()
@@ -43,7 +43,6 @@ export default function PricingAvailability() {
   const slots = useMemo(() => getSlotsForDate(selectedDate), [selectedDate])
   const remaining = slots.length - PREVIEW_COUNT
   const visibleSlots = showFull ? slots : slots.slice(0, PREVIEW_COUNT)
-  const availableCount = slots.filter((s) => s.status === 'available').length
 
   const handleDateChange = (value) => {
     setSelectedDate(value || today)
@@ -61,9 +60,9 @@ export default function PricingAvailability() {
   })()
 
   return (
-    <section id="pricing" className="section-space">
+    <section id="pricing" className="pb-4 pt-12 sm:pb-6 sm:pt-14 md:pb-8 md:pt-20 lg:pt-24">
       <Container>
-        <div className="grid items-start gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 xl:gap-14">
+        <div className="grid items-stretch gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 xl:gap-14">
           <div>
             <motion.h2
               initial={{ opacity: 0, y: 16 }}
@@ -148,19 +147,24 @@ export default function PricingAvailability() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.55 }}
-            className="glass-card relative w-full overflow-hidden p-4 sm:p-5 md:p-6 lg:mt-2"
+            className="glass-card relative flex h-full w-full flex-col overflow-hidden p-4 sm:p-5 md:p-6"
           >
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgb(132_211_33_/_0.1),_transparent_50%)]" />
 
-            <div className="relative">
-              <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-2">
+            <div className="relative flex flex-1 flex-col">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
                 <h3 className="font-display text-sm font-bold uppercase tracking-[0.1em] text-primary sm:text-base sm:tracking-[0.12em] md:text-lg">
                   Live Slot Availability
                 </h3>
-                <p className="text-[11px] text-muted sm:text-xs">
-                  <span className="font-semibold text-primary">{availableCount}</span>
-                  {' '}open · {slots.length} slots
-                </p>
+                <motion.button
+                  type="button"
+                  onClick={() => scrollToSection('book-slot')}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex shrink-0 items-center justify-center self-start rounded-full bg-primary px-5 py-2 text-xs font-bold uppercase tracking-wide text-bg btn-glow sm:self-auto sm:px-6 sm:py-2.5 sm:text-sm"
+                >
+                  Book
+                </motion.button>
               </div>
 
               {/* Date picker */}
@@ -237,7 +241,7 @@ export default function PricingAvailability() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowFull((v) => !v)}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-primary bg-transparent px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-text transition hover:bg-primary/10 sm:mt-5 sm:px-5 sm:py-3 sm:text-sm"
+                className="mt-auto flex w-full items-center justify-center gap-2 rounded-full border border-primary bg-transparent px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-text transition hover:bg-primary/10 sm:mt-5 sm:px-5 sm:py-3 sm:text-sm"
               >
                 {showFull ? (
                   <>

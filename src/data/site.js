@@ -2,6 +2,7 @@ export const siteInfo = {
   name: 'SHREE TURF 360°',
   shortName: 'SHREE TURF',
   tagline: 'आपली माणसं आपलं मैदान',
+  taglineAlt: 'इचलकरंजीकरांची हक्काची Turf!',
   location: 'Ichalkaranji, Kolhapur, Maharashtra',
   address: 'Near MIDC Road, Ichalkaranji, Kolhapur, Maharashtra 416115',
   addressLines: ['Shree Turf 360°', 'Ichalkaranji', 'Kolhapur, Maharashtra'],
