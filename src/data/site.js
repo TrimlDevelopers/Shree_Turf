@@ -3,9 +3,14 @@ export const siteInfo = {
   shortName: 'SHREE TURF',
   tagline: 'आपली माणसं आपलं मैदान',
   taglineAlt: 'इचलकरंजीकरांची हक्काची Turf!',
-  location: 'Ichalkaranji, Kolhapur, Maharashtra',
-  address: 'Near MIDC Road, Ichalkaranji, Kolhapur, Maharashtra 416115',
-  addressLines: ['Shree Turf 360°', 'Ichalkaranji', 'Kolhapur, Maharashtra'],
+  location: 'Ichalkaranji, Maharashtra',
+  address:
+    'Balaji chowk, near Balaji Patsansatha, Asara Nagar, Ichalkaranji, Maharashtra 416115',
+  addressLines: [
+    'Balaji chowk, near Balaji Patsansatha',
+    'Asara Nagar, Ichalkaranji',
+    'Maharashtra 416115',
+  ],
   phone: '+91 98765 43210',
   email: 'book@shreeturf360.com',
   hours: '6:00 AM – 12:00 AM',
@@ -13,7 +18,10 @@ export const siteInfo = {
   instagram: 'https://instagram.com/shreeturf360',
   facebook: 'https://facebook.com/shreeturf360',
   mapsUrl:
-    'https://www.google.com/maps/search/?api=1&query=Ichalkaranji+Kolhapur+Maharashtra',
+    'https://www.google.com/maps/search/?api=1&query=' +
+    encodeURIComponent(
+      'Balaji chowk, near Balaji Patsansatha, Asara Nagar, Ichalkaranji, Maharashtra 416115',
+    ),
 }
 
 export const navLinks = [

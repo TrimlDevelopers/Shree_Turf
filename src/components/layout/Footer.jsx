@@ -6,7 +6,6 @@ import {
   FaMapMarkerAlt,
 } from 'react-icons/fa'
 import { siteInfo } from '../../data/site'
-import { scrollToSection } from '../../hooks/useActiveSection'
 import Container from '../ui/Container'
 
 const socialLinks = [
@@ -49,13 +48,14 @@ export default function Footer() {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => scrollToSection('contact')}
+            <a
+              href={siteInfo.mapsUrl}
+              target="_blank"
+              rel="noreferrer"
               className="inline-flex min-h-9 items-center justify-center rounded-xl border border-primary/40 bg-transparent px-3 py-2 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-primary transition hover:bg-primary/10"
             >
               Get Directions
-            </button>
+            </a>
           </div>
         </motion.div>
 
