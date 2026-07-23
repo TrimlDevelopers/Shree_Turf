@@ -24,7 +24,7 @@ export default function Footer() {
     <footer className="relative overflow-hidden border-t border-primary/20 bg-bg">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgb(132_211_33_/_0.1),_transparent_55%)]" />
 
-      <Container className="relative grid gap-8 py-10 sm:gap-10 sm:py-12 md:grid-cols-2 md:items-stretch md:gap-8 lg:py-14">
+      <Container className="relative grid gap-6 py-8 sm:gap-8 sm:py-10 md:grid-cols-2 md:items-stretch md:gap-6 lg:py-12">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -36,14 +36,14 @@ export default function Footer() {
             Connect With Us
           </p>
 
-          <div className="mt-4 flex flex-1 flex-col gap-3">
-            <div className="flex flex-1 items-start gap-3 rounded-2xl border border-white/8 bg-card/70 px-4 py-4 sm:px-5 sm:py-5">
-              <FaMapMarkerAlt className="mt-0.5 shrink-0 text-primary" size={16} />
+          <div className="mt-3 flex flex-1 flex-col gap-2">
+            <div className="flex items-start gap-2.5 rounded-xl border border-white/8 bg-card/70 px-3 py-2.5 sm:px-3.5 sm:py-3">
+              <FaMapMarkerAlt className="mt-0.5 shrink-0 text-primary" size={13} />
               <div className="min-w-0">
-                <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-muted">
+                <p className="text-[0.6rem] font-bold uppercase tracking-[0.14em] text-muted">
                   Location
                 </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-text">
+                <p className="mt-1 text-xs leading-relaxed text-text sm:text-[0.8rem]">
                   {siteInfo.address}
                 </p>
               </div>
@@ -52,7 +52,7 @@ export default function Footer() {
             <button
               type="button"
               onClick={() => scrollToSection('contact')}
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-primary/40 bg-transparent px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-primary transition hover:bg-primary/10"
+              className="inline-flex min-h-9 items-center justify-center rounded-xl border border-primary/40 bg-transparent px-3 py-2 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-primary transition hover:bg-primary/10"
             >
               Get Directions
             </button>
@@ -70,7 +70,7 @@ export default function Footer() {
             Follow Us
           </p>
 
-          <div className="mt-4 grid flex-1 grid-cols-3 gap-3">
+          <div className="mt-3 grid flex-1 grid-cols-3 gap-2 sm:gap-2.5">
             {socialLinks.map(({ label, href, icon: Icon }) => (
               <a
                 key={label}
@@ -78,10 +78,10 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="group flex h-full min-h-[5.5rem] flex-col items-center justify-center gap-2 rounded-2xl border border-primary/45 bg-card px-2 py-4 text-primary transition duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-primary hover:text-bg hover:shadow-[0_0_24px_rgb(132_211_33_/_0.35)] sm:min-h-[6.5rem] sm:py-5"
+                className="group flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-xl border border-primary/45 bg-card px-1.5 py-2 text-primary transition duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-primary hover:text-bg hover:shadow-[0_0_16px_rgb(132_211_33_/_0.3)] sm:min-h-[3.5rem] sm:py-2.5 md:min-h-[3.75rem]"
               >
-                <Icon size={20} />
-                <span className="text-[0.65rem] font-semibold uppercase tracking-[0.12em]">
+                <Icon size={15} />
+                <span className="text-[0.55rem] font-semibold uppercase tracking-[0.1em] sm:text-[0.6rem]">
                   {label}
                 </span>
               </a>

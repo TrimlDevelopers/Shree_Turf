@@ -70,7 +70,7 @@ export default function Hero() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.85, ease }}
-      className="relative isolate aspect-[1077/1294] min-h-0 overflow-hidden bg-bg md:aspect-auto md:min-h-[100svh]"
+      className="relative isolate min-h-[100svh] overflow-hidden bg-bg md:min-h-[100svh] md:aspect-auto"
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -101,7 +101,7 @@ export default function Hero() {
             aria-hidden
             fetchPriority="high"
             decoding="async"
-            className="absolute inset-0 hidden h-full w-full object-cover object-[center_70%] brightness-110 contrast-105 saturate-125 md:block"
+            className="absolute inset-0 hidden h-full w-full object-cover object-[center_52%] brightness-110 contrast-105 saturate-125 md:block"
           />
         </motion.div>
 
@@ -109,7 +109,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
       </div>
 
-      <Container className="relative flex h-full min-h-0 flex-col justify-center py-28 pt-44 sm:py-32 sm:pt-52 md:min-h-[100svh] md:py-36 md:pt-56">
+      <Container className="relative flex min-h-[100svh] flex-col justify-center py-28 pt-44 sm:py-32 sm:pt-52 md:h-full md:min-h-0 md:py-36 md:pt-56">
         {/* Headline — upper right */}
         <motion.h1
           initial={{ opacity: 0, x: 24 }}
@@ -130,14 +130,14 @@ export default function Hero() {
         >
           <motion.p
             variants={item}
-            className="text-[11.3px] font-bold uppercase tracking-[0.22em] text-white sm:text-[12.4px] md:text-[13.4px] md:tracking-[0.28em] md:[text-shadow:0_2px_10px_rgba(0,0,0,0.85),0_1px_2px_rgba(0,0,0,0.9)]"
+            className="text-[11.3px] font-bold uppercase tracking-[0.22em] text-white sm:text-[12.4px] md:text-[13.4px] md:tracking-[0.28em]"
           >
             Ichalkaranji&apos;s Premier Turf
           </motion.p>
 
           <motion.p
             variants={item}
-            className="mt-2.5 text-[15.5px] font-semibold leading-snug tracking-wide text-primary sm:mt-3 sm:text-[16.5px] md:text-[18.5px] md:text-accent md:[text-shadow:0_2px_12px_rgba(0,0,0,0.9),0_1px_3px_rgba(0,0,0,1)] lg:text-[20.6px]"
+            className="mt-2.5 text-[15.5px] font-semibold leading-snug tracking-wide text-accent [text-shadow:0_2px_12px_rgba(0,0,0,0.75),0_1px_2px_rgba(0,0,0,0.9)] sm:mt-3 sm:text-[16.5px] md:text-[18.5px] lg:text-[20.6px]"
           >
             {siteInfo.tagline}
           </motion.p>
