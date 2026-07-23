@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
 import { galleryImages } from '../../data/content'
 import Container from '../ui/Container'
 import { cn } from '../../utils/cn'
@@ -8,7 +7,6 @@ import { cn } from '../../utils/cn'
 export default function Gallery() {
   const prefersReducedMotion = useReducedMotion()
   const [paused, setPaused] = useState(false)
-  const [reverse, setReverse] = useState(false)
 
   const loopImages = useMemo(
     () => [...galleryImages, ...galleryImages, ...galleryImages],
@@ -21,39 +19,14 @@ export default function Gallery() {
   return (
     <section id="gallery" className="relative z-10 bg-bg pb-8 pt-0 sm:pb-10 sm:pt-4 md:pb-12 md:pt-6">
       <Container>
-        <div className="mb-6 flex items-center justify-between gap-3 sm:mb-8 md:mb-10 md:gap-4">
-          <motion.h2
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-display text-xl font-bold uppercase tracking-[0.14em] text-primary sm:text-2xl sm:tracking-[0.18em] md:text-3xl"
-          >
-            Gallery
-          </motion.h2>
-
-          <div className="flex shrink-0 gap-2">
-            <button
-              type="button"
-              aria-label="Scroll gallery left"
-              onClick={() => setReverse(true)}
-              onMouseEnter={pause}
-              onMouseLeave={resume}
-              className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-primary text-primary transition hover:bg-primary hover:text-bg sm:h-10 sm:w-10 md:h-11 md:w-11"
-            >
-              <HiChevronLeft size={20} />
-            </button>
-            <button
-              type="button"
-              aria-label="Scroll gallery right"
-              onClick={() => setReverse(false)}
-              onMouseEnter={pause}
-              onMouseLeave={resume}
-              className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-primary text-primary transition hover:bg-primary hover:text-bg sm:h-10 sm:w-10 md:h-11 md:w-11"
-            >
-              <HiChevronRight size={20} />
-            </button>
-          </div>
-        </div>
+        <motion.h2
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-6 font-display text-xl font-bold uppercase tracking-[0.14em] text-primary sm:mb-8 sm:text-2xl sm:tracking-[0.18em] md:mb-10 md:text-3xl"
+        >
+          Gallery
+        </motion.h2>
       </Container>
 
       <motion.div
@@ -72,7 +45,7 @@ export default function Gallery() {
         <div
           className={cn(
             'flex w-max gap-3 sm:gap-4 md:gap-5',
-            !prefersReducedMotion && (reverse ? 'animate-gallery-marquee-reverse' : 'animate-gallery-marquee'),
+            !prefersReducedMotion && 'animate-gallery-marquee',
             paused && '![animation-play-state:paused]',
           )}
         >

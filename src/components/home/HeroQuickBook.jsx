@@ -118,7 +118,7 @@ export default function HeroQuickBook() {
               >
                 <HiCheckCircle className="text-primary" size={48} />
                 <p className="mt-3 font-display text-xl font-bold text-white">
-                  {selectedTimes.length > 1 ? 'Slots Available' : 'Slot Available'}
+                  Slot booked waiting for confirmation
                 </p>
                 <p className="mt-1 text-sm text-muted">
                   {game} · {formatDisplayDate(date)}
