@@ -1,0 +1,11 @@
+{
+  "name": "shree-turf",
+  "private": true,
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "build": "npm install --prefix frontend && npm run build --prefix frontend",
+    "start:api": "npm start --prefix backend"
+  }
+}

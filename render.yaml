@@ -25,12 +25,17 @@ services:
       - key: RESEND_FROM
         sync: false
 
+  # Works even if Render Root Directory is empty (repo root).
+  # Dashboard: Build Command can be `npm install; npm run build`
+  # Publish Directory must be `frontend/dist`
   - type: web
     name: shree-turf
     runtime: static
-    rootDir: frontend
-    buildCommand: npm ci && npm run build
-    staticPublishPath: dist
+    buildCommand: npm install --prefix frontend && npm run build --prefix frontend
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
     routes:
       - type: rewrite
         source: /*
